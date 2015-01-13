@@ -15,5 +15,6 @@ namespace ArtificialNeuralNetworkDataFeeder.DataPickers {
 				throw new NotImplementedException();
 			}
 		}
-	}
+        public IDataCompiler Compiler { get; set; }
+    }
 }

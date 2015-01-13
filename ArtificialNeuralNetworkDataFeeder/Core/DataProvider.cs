@@ -24,7 +24,8 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 			while (i < dataLength) {
 				var j = i * inputLength;
 				foreach (var dataPicker in InputDataPickers) {
-					result[j] = (double)dataPicker.Indicator.DataProcessor.Process(data, i + dataPicker.Index);
+                    var compiledData = Array.ConvertAll(data, datum => dataPicker.Compiler.Compile(datum));
+                    result[j] = (double)dataPicker.Indicator.DataProcessor.Process(compiledData, i + dataPicker.Index);
 					j++;
 	            }
 				i++;
