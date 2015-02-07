@@ -11,6 +11,7 @@ using ArtificialNeuralNetworkDataFeeder.DataIndicator;
 using ArtificialNeuralNetworkDataFeeder.DataPickers;
 using CsvHelper;
 using ArtificialNeuralNetworkDataFeeder.DataCompilers;
+using FANN.Net;
 
 namespace ArtificialNeuralNetworkDataFeeder.Console {
 	class Program {
@@ -29,6 +30,13 @@ namespace ArtificialNeuralNetworkDataFeeder.Console {
 			var dataProvider = new DataProvider();
             dataProvider.InputDataPickers.Add(new MovingAverageDataPicker() { Index = 0, Indicator = new MovingAverageIndicator(), Compiler=new CloseDataCompiler() });
 			var set = dataProvider.Build(data);
-		}
+
+			var nn = new NeuralNet() {
+
+			};
+			nn.CreateStandardArray(new uint[] { (uint)dataProvider.InputDataPickers.Count(), 10, 16, (uint)dataProvider.OutputDataPickers.Count() });
+			nn.SetLearningRate(0.7f);
+			
+        }
 	}
 }
