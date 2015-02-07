@@ -10,11 +10,10 @@ namespace ArtificialNeuralNetworkDataFeeder.DataPickers {
 		public int Index { get; set; }
 		public IDataIndicator Indicator { get; set; }
 
-		public IDataNormalizer Normalizer {
-			get {
-				throw new NotImplementedException();
-			}
-		}
+        public IDataNormalizer Normalizer {
+            get;
+            set;
+        }
         public IDataCompiler Compiler { get; set; }
     }
 }

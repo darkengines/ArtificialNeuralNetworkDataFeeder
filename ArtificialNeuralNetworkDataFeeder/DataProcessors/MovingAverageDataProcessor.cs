@@ -16,5 +16,9 @@ namespace ArtificialNeuralNetworkDataFeeder.DataProcessors {
 			while (index-- > limit) sum += data[index];
 			return sum / Period;
 		}
-	}
+
+        public override int IndexMinimum {
+            get { return Period - 1; }
+        }
+    }
 }

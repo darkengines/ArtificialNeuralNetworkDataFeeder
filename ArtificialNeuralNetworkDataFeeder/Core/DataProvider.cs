@@ -16,23 +16,40 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 			InputDataPickers = new Collection<IDataPicker>();
 			OutputDataPickers = new Collection<IDataPicker>();
 		}
-		public double[] Build(Datum[] data) {
-			var dataLength = data.Length;
-			var inputLength = InputDataPickers.Count;
-			var outputLength = OutputDataPickers.Count;
-			var result = new double[dataLength * (inputLength+outputLength)];
-			var i = 0;
-			var dataPickers = InputDataPickers.Concat(OutputDataPickers);
-			while (i < dataLength-inputLength-outputLength) {
-				var j = i * inputLength;
-				foreach (var dataPicker in dataPickers) {
-                    var compiledData = Array.ConvertAll(data, datum => dataPicker.Compiler.Compile(datum));
-                    result[j] = (double)dataPicker.Indicator.DataProcessor.Process(compiledData, i + dataPicker.Index);
-					j++;
-	            }
-				i++;
-			}
-			return result;
+        public double[] Build (Datum[] data, out int dataCount) {
+            var dataPickers = InputDataPickers.Concat(OutputDataPickers);
+            var startIndex = dataPickers.Select(dp => dp.Indicator.DataProcessor.IndexMinimum - dp.Index).Max();
+            var endIndex = dataPickers.Select(dp => dp.Index).Max();
+            dataCount = data.Length - endIndex - startIndex;
+            var sets = new Dictionary<IDataPicker, double[]>();
+            foreach (var dataPicker in dataPickers) {
+                var set = new object[dataCount];
+                var index = dataPicker.Index;
+                var setIndex = 0;
+                var count = dataPicker.Indicator.DataProcessor.IndexMinimum + 1;
+                while (index < dataCount + dataPicker.Index) {
+                    var compiledData = new object[count];
+                    Array.Copy(data, index, compiledData, 0, count);
+                    compiledData = Array.ConvertAll<object, object>(compiledData, x => dataPicker.Compiler.Compile((Datum)x));
+                    set[setIndex] = (double)dataPicker.Indicator.DataProcessor.Process(compiledData, count - 1);
+                    index++;
+                    setIndex++;
+                }
+                dataPicker.Normalizer.Initialize(set);
+                sets[dataPicker] = Array.ConvertAll<object, double>(set, x => (double)dataPicker.Normalizer.Normalize(x));
+            }
+            var i = 0;
+            var total = dataCount * dataPickers.Count();
+            var result = new double[total];
+            var j = 0;
+            while (i < total) {
+                foreach (var set in sets.Values) {
+                    result[i] = set[j];
+                    i++;
+                }
+                j++;
+            }
+            return result;
 		}
     }
 }
