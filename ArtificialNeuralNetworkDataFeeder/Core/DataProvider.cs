@@ -19,11 +19,13 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 		public double[] Build(Datum[] data) {
 			var dataLength = data.Length;
 			var inputLength = InputDataPickers.Count;
-			var result = new double[dataLength * inputLength];
+			var outputLength = OutputDataPickers.Count;
+			var result = new double[dataLength * (inputLength+outputLength)];
 			var i = 0;
-			while (i < dataLength) {
+			var dataPickers = InputDataPickers.Concat(OutputDataPickers);
+			while (i < dataLength-inputLength-outputLength) {
 				var j = i * inputLength;
-				foreach (var dataPicker in InputDataPickers) {
+				foreach (var dataPicker in dataPickers) {
                     var compiledData = Array.ConvertAll(data, datum => dataPicker.Compiler.Compile(datum));
                     result[j] = (double)dataPicker.Indicator.DataProcessor.Process(compiledData, i + dataPicker.Index);
 					j++;
