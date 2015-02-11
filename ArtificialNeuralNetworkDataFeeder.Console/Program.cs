@@ -8,11 +8,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using ArtificialNeuralNetworkDataFeeder.Core;
 using ArtificialNeuralNetworkDataFeeder.DataIndicator;
-using ArtificialNeuralNetworkDataFeeder.DataPickers;
 using CsvHelper;
 using ArtificialNeuralNetworkDataFeeder.DataCompilers;
 using FANN.Net;
 using ArtificialNeuralNetworkDataFeeder.DataNormalizers;
+using System.Web.Script.Serialization;
+using System.Collections.ObjectModel;
+using Newtonsoft.Json;
 
 namespace ArtificialNeuralNetworkDataFeeder.Console {
 	class Program {
@@ -28,22 +30,11 @@ namespace ArtificialNeuralNetworkDataFeeder.Console {
 					data = csv.GetRecords<Datum>().ToArray();
 				}
 			}
-			var dataProvider = new DataProvider();
-            dataProvider.InputDataPickers.Add(new MovingAverageDataPicker() { Index = 0, Indicator = new MovingAverageIndicator(), Compiler=new CloseDataCompiler(), Normalizer= new RangeDataNormalizer() });
-            dataProvider.InputDataPickers.Add(new MovingAverageDataPicker() { Index = 1, Indicator = new MovingAverageIndicator(), Compiler = new CloseDataCompiler(), Normalizer = new RangeDataNormalizer() });
-            dataProvider.InputDataPickers.Add(new MovingAverageDataPicker() { Index = 2, Indicator = new MovingAverageIndicator(), Compiler = new CloseDataCompiler(), Normalizer = new RangeDataNormalizer() });
-            dataProvider.InputDataPickers.Add(new MovingAverageDataPicker() { Index = 3, Indicator = new MovingAverageIndicator(), Compiler = new CloseDataCompiler(), Normalizer = new RangeDataNormalizer() });
-            dataProvider.InputDataPickers.Add(new MovingAverageDataPicker() { Index = 4, Indicator = new MovingAverageIndicator(), Compiler = new CloseDataCompiler(), Normalizer = new RangeDataNormalizer() });
-            dataProvider.InputDataPickers.Add(new MovingAverageDataPicker() { Index = 5, Indicator = new MovingAverageIndicator(), Compiler = new CloseDataCompiler(), Normalizer = new RangeDataNormalizer() });
-            dataProvider.InputDataPickers.Add(new MovingAverageDataPicker() { Index = 6, Indicator = new MovingAverageIndicator(), Compiler = new CloseDataCompiler(), Normalizer = new RangeDataNormalizer() });
-            dataProvider.InputDataPickers.Add(new MovingAverageDataPicker() { Index = 7, Indicator = new MovingAverageIndicator(), Compiler = new CloseDataCompiler(), Normalizer = new RangeDataNormalizer() });
-            dataProvider.InputDataPickers.Add(new MovingAverageDataPicker() { Index = 8, Indicator = new MovingAverageIndicator(), Compiler = new CloseDataCompiler(), Normalizer = new RangeDataNormalizer() });
-            dataProvider.OutputDataPickers.Add(new MovingAverageDataPicker() { Index = 9, Indicator = new MovingAverageIndicator(), Compiler = new CloseDataCompiler(), Normalizer = new RangeDataNormalizer() });
-            dataProvider.OutputDataPickers.Add(new MovingAverageDataPicker() { Index = 10, Indicator = new MovingAverageIndicator(), Compiler = new CloseDataCompiler(), Normalizer = new RangeDataNormalizer() });
-            dataProvider.OutputDataPickers.Add(new MovingAverageDataPicker() { Index = 11, Indicator = new MovingAverageIndicator(), Compiler = new CloseDataCompiler(), Normalizer = new RangeDataNormalizer() });
-			int count = 0;
-            var set = dataProvider.Build(data, out count);
 
+			var dataProvider = DataProvider.Load("config.js");
+			int count = 0;
+			var set = dataProvider.BuildTrainingData(data, out count);
+			
 			var nn = new NeuralNet();
 			nn.CreateStandardArray(new uint[] { (uint)dataProvider.InputDataPickers.Count(), 16, 8, 4, (uint)dataProvider.OutputDataPickers.Count() });
 			nn.SetLearningRate(0.7f);
@@ -63,12 +54,12 @@ namespace ArtificialNeuralNetworkDataFeeder.Console {
 				}
             );
             nn.Callback += nn_Callback;
-			nn.TrainOnData(trainingData, 1000000000, 100, 0.000000000001f);
+			nn.TrainOnData(trainingData, 1000000000, 10, 0.0000000001f);
             System.Console.In.ReadLine();
 		}
 
         static int nn_Callback (NeuralNet net, TrainingData train, uint maxEpochs, uint epochsBetweenReports, float desiredError, uint epochs) {
-            System.Console.Out.WriteLine(net.GetMSE().ToString("0.0000000000000000000000000000000"));
+            System.Console.Out.WriteLine(net.GetMSE().ToString("0.############"));
             return 0;
         }
 	}

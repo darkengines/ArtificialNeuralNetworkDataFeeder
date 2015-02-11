@@ -1,13 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ArtificialNeuralNetworkDataFeeder.Core;
-using ArtificialNeuralNetworkDataFeeder.DataProcessors;
+﻿using ArtificialNeuralNetworkDataFeeder.Core;
 
 namespace ArtificialNeuralNetworkDataFeeder.DataIndicator {
 	public class MovingAverageIndicator : DataIndicator<double, double> {
-		public override DataProcessor<double, double> DataProcessor { get { return new MovingAverageDataProcessor() { Period = 12 }; } }
+		public int Period { get; set; }
+		public override double Process(double[] data, int index)
+		{
+			index = index + 1;
+			if (index < Period) return data[index - 1];
+			var limit = index - Period;
+			var sum = 0d;
+			while (index-- > limit) sum += data[index];
+			return sum / Period;
+		}
+
+		public override int IndexMinimum
+		{
+			get { return Period - 1; }
+		}
 	}
 }

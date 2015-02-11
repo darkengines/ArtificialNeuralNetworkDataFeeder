@@ -45,6 +45,7 @@
     <Compile Include="Core\IDataPicker.cs" />
     <Compile Include="Core\IDataProcessor.cs" />
     <Compile Include="Core\IDataIndicator.cs" />
+    <Compile Include="Core\TrainData.cs" />
     <Compile Include="DataCompilers\CloseDataCompiler.cs" />
     <Compile Include="DataIndicator\MovingAverageIndicator.cs" />
     <Compile Include="DataNormalizers\RangeDataNormalizer.cs" />
