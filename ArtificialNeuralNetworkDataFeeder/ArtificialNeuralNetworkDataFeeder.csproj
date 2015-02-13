@@ -30,6 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Fann.Net">
+      <HintPath>..\lib\Fann.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RGiesecke.DllExport.Metadata">
+      <HintPath>..\packages\UnmanagedExports.1.2.6\lib\net\RGiesecke.DllExport.Metadata.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,18 +52,21 @@
     <Compile Include="Core\IDataCompiler.cs" />
     <Compile Include="Core\IDataNormalizer.cs" />
     <Compile Include="Core\IDataPicker.cs" />
-    <Compile Include="Core\IDataProcessor.cs" />
     <Compile Include="Core\IDataIndicator.cs" />
+    <Compile Include="Core\NeuralNetworkConfiguration.cs" />
     <Compile Include="Core\TrainData.cs" />
     <Compile Include="DataCompilers\CloseDataCompiler.cs" />
     <Compile Include="DataIndicator\MovingAverageIndicator.cs" />
     <Compile Include="DataNormalizers\RangeDataNormalizer.cs" />
-    <Compile Include="DataPickers\MovingAverageDataPicker.cs" />
-    <Compile Include="DataProcessors\MovingAverageDataProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\Datum.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="fanndoubleMT.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
