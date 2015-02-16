@@ -2,13 +2,14 @@
 
 namespace ArtificialNeuralNetworkDataFeeder.Core {
     public interface IDataNormalizer {
-        object Normalize (object datum);
-        void Initialize (object[] data);
+        double Normalize (double datum);
+		double Denormalize(double datum);
+        void Initialize (double[] data);
     }
-    public abstract class DataNormalizer<TIn, TOut> : IDataNormalizer {
-        public abstract TOut Normalize (TIn datum);
-        public abstract void Initialize (double[] data);
-        object IDataNormalizer.Normalize (object datum) { return Normalize((TIn)datum); }
-        void IDataNormalizer.Initialize (object[] data) { Initialize(Array.ConvertAll<object, double>(data, x => (double)x)); }
-    }
+	public abstract class DataNormalizer : IDataNormalizer
+	{
+		public abstract double Normalize(double datum);
+		public abstract double Denormalize(double datum);
+		public abstract void Initialize(double[] data);
+	}
 }

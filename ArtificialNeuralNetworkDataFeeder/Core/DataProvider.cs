@@ -1,4 +1,5 @@
-﻿using FANN.Net;
+﻿using Encog.Neural.Networks;
+using FANN.Net;
 using Newtonsoft.Json;
 using RGiesecke.DllExport;
 using System;
@@ -12,15 +13,19 @@ using System.Threading.Tasks;
 
 namespace ArtificialNeuralNetworkDataFeeder.Core
 {
-    public class DataProvider
-    {
+	public class DataProvider
+	{
+		[JsonIgnore]
 		public NeuralNet.CallbackType Callback = null;
+		[JsonIgnore]
 		public const string NeuralNetConfigurationFileExtension = "nn";
+		[JsonIgnore]
 		public NeuralNet NeuralNetwork { get; protected set; }
 		public NeuralNetworkConfiguration NeuralNetworkConfiguration { get; set; }
-        public Collection<DataPicker> InputDataPickers { get; private set; }
-        public Collection<DataPicker> OutputDataPickers { get; private set; }
-		public DataProvider() {
+		public Collection<DataPicker> InputDataPickers { get; private set; }
+		public Collection<DataPicker> OutputDataPickers { get; private set; }
+		public DataProvider()
+		{
 			InputDataPickers = new Collection<DataPicker>();
 			OutputDataPickers = new Collection<DataPicker>();
 		}
@@ -52,52 +57,84 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 			return dataProvider;
 		}
 
-		protected double[] BuildTrainingData(Datum[] data, out uint dataCount) {
-			var dataPickers = InputDataPickers.Concat(OutputDataPickers);
-			var startIndex = dataPickers.Select(dp => dp.Indicator.IndexMinimum - dp.Index).Max();
-			var endIndex = dataPickers.Select(dp => dp.Index).Max();
-			dataCount = (uint)(data.Length - endIndex - startIndex);
-			var sets = new Dictionary<IDataPicker, double[]>();
-			foreach (var dataPicker in dataPickers)
-			{
-				var set = new object[dataCount];
-				var index = dataPicker.Index;
-				var setIndex = 0;
-				var count = dataPicker.Indicator.IndexMinimum + 1;
-				while (index < dataCount + dataPicker.Index)
-				{
-					var compiledData = new object[count];
-					Array.Copy(data, index, compiledData, 0, count);
-					compiledData = Array.ConvertAll<object, object>(compiledData, x => dataPicker.Compiler.Compile((Datum)x));
-					set[setIndex] = (double)dataPicker.Indicator.Process(compiledData, count - 1);
-					index++;
-					setIndex++;
-				}
-				dataPicker.Normalizer.Initialize(set);
-				sets[dataPicker] = Array.ConvertAll<object, double>(set, x => (double)dataPicker.Normalizer.Normalize(x));
-			}
-			var i = 0;
-			var total = dataCount * dataPickers.Count();
-			var result = new double[total];
-			var j = 0;
-			while (i < total)
-			{
-				foreach (var set in sets.Values)
-				{
-					result[i] = set[j];
-					i++;
-				}
-				j++;
-			}
-			return result;
-		}
-		public void BuildNeuralNetwork(Datum[] rawTrainingData)
+		public int MinimumIndex
 		{
-			uint dataCount = 0;
-			var data = BuildTrainingData(rawTrainingData, out dataCount);
-			NeuralNetwork = new NeuralNet();
+			get
+			{
+				var dataPickers = InputDataPickers.Concat(OutputDataPickers);
+				return dataPickers.Select(dp => dp.Indicator.IndexMinimum - dp.Index).Max();
+			}
+		}
+
+		protected double[] BuildTrainingData(Datum[] data, out uint dataCount)
+		{
+			dataCount = (uint)data.Length;
+			var inputCount = InputDataPickers.Count();
+			var processedCompiledInputs = new double[inputCount];
+			var normalizedProcessedCompiledInputs = new double[inputCount];
+			var dataPickers = InputDataPickers.OrderBy(inputDataPicker => inputDataPicker.Index).Concat(OutputDataPickers.OrderBy(outputDataPicker => outputDataPicker.Index)).ToArray();
+			var sets = new Dictionary<IDataPicker, double>();
+			int i = 0;
+			while (i < inputCount)
+			{
+				var dataPicker = dataPickers[i];
+				var compiledInputsCount = dataPicker.Indicator.IndexMinimum + 1;
+				var compiledInputs = new double[compiledInputsCount];
+				int j = 0;
+				while (j < compiledInputsCount)
+				{
+					compiledInputs[j] = dataPicker.Compiler.Compile(data[dataPicker.Index + j]);
+					j++;
+				}
+				processedCompiledInputs[i] = dataPicker.Indicator.Process(compiledInputs, dataPicker.Indicator.IndexMinimum);
+				normalizedProcessedCompiledInputs[i] = dataPicker.Normalizer.Normalize(processedCompiledInputs[i]);
+				i++;
+			}
+		}
+
+		protected TrainingData BuildTrainingData(double[] data, uint dataCount)
+		{
 			var inputCount = (uint)InputDataPickers.Count();
 			var outputCount = (uint)OutputDataPickers.Count();
+			var trainingData = new TrainingData();
+			//trainingData.CreateTrainFromCallback(dataCount, inputCount, outputCount,
+			//	(numData, numInput, numOutput, input, output) =>
+			//	{
+			//		var index = numData * (numInput + numOutput);
+			//		Array.Copy(data, index, input, 0, numInput);
+			//		Array.Copy(data, index + numInput, output, 0, numOutput);
+			//	}
+			//);
+			var temp = Path.GetTempFileName();
+			using (var stream = new FileStream(temp, FileMode.Create, FileAccess.Write))
+			{
+				using (var writer = new StreamWriter(stream))
+				{
+					writer.WriteLine(string.Format("{0} {1} {2}", dataCount, inputCount, outputCount));
+					int i = 0;
+					int unit = (int)(inputCount + outputCount);
+                    while (i < dataCount)
+					{
+						var index = i * (unit);
+						var input = new double[inputCount];
+						var output = new double[outputCount];
+						Array.Copy(data, index, input, 0, inputCount);
+						Array.Copy(data, (int)(index+inputCount), output, 0, outputCount);
+						writer.WriteLine(string.Join(" ", input));
+						writer.WriteLine(string.Join(" ", output));
+						i++;
+					}
+				}
+			}
+			trainingData.ReadTrainFromFile(temp);
+            return trainingData;
+		}
+
+		public void InitializeNeuralNetwork()
+		{
+			var inputCount = (uint)InputDataPickers.Count();
+			var outputCount = (uint)OutputDataPickers.Count();
+			NeuralNetwork = new NeuralNet();
 			var layers = NeuralNetworkConfiguration.HiddenLayers;
 			layers.Insert(0, inputCount);
 			layers.Add(outputCount);
@@ -110,32 +147,72 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 			NeuralNetwork.SetActivationFunctionOutput(ActivationFunction.SigmoidSymmetric);
 			NeuralNetwork.SetTrainStopFunction(StopFunction.MSE);
 
-			var trainingData = new TrainingData();
-			trainingData.CreateTrainFromCallback(dataCount, inputCount, outputCount,
-				(numData, numInput, numOutput, input, output) =>
-				{
-					var index = numData * (numInput + numOutput);
-					Array.Copy(data, index, input, 0, numInput);
-					Array.Copy(data, index + numInput, output, 0, numOutput);
-				}
-			);
+			var test = new BasicNetwork();
+		}
+
+		public void TrainNeuralNetwork(double[] data, uint dataCount)
+		{
+			var trainingData = BuildTrainingData(data, dataCount);
 			NeuralNetwork.Callback += NeuralNetwork_Callback;
+
 			NeuralNetwork.TrainOnData(trainingData, NeuralNetworkConfiguration.MaxEpochs, NeuralNetworkConfiguration.EpochsBetweenReports, NeuralNetworkConfiguration.DesiredMSE);
+		}
+
+		public void BuildNeuralNetwork(Datum[] rawTrainingData)
+		{
+			uint dataCount = 0;
+			var data = BuildTrainingData(rawTrainingData, out dataCount);
+			InitializeNeuralNetwork();
+			TrainNeuralNetwork(data, dataCount);
+		}
+
+		public object[] Run(Datum[] data)
+		{
+			var dataCount = data.Length;
+			var inputCount = InputDataPickers.Count();
+			var processedCompiledInputs = new double[inputCount];
+			var normalizedProcessedCompiledInputs = new double[inputCount];
+			var inputDataPickers = InputDataPickers.OrderBy(inputDataPicker => inputDataPicker.Index).ToArray();
+			var sets = new Dictionary<IDataPicker, double>();
+			int i = 0;
+			while (i < inputCount)
+			{
+				var dataPicker = inputDataPickers[i];
+				var compiledInputsCount = dataPicker.Indicator.IndexMinimum + 1;
+                var compiledInputs = new double[compiledInputsCount];
+				int j = 0;
+				while (j < compiledInputsCount)
+				{
+					compiledInputs[j] = dataPicker.Compiler.Compile(data[dataPicker.Index+j]);
+					j++;
+				}
+				processedCompiledInputs[i] = dataPicker.Indicator.Process(compiledInputs, dataPicker.Indicator.IndexMinimum);
+				normalizedProcessedCompiledInputs[i] = dataPicker.Normalizer.Normalize(processedCompiledInputs[i]);
+				i++;
+			}
+			var outputs = NeuralNetwork.Run(normalizedProcessedCompiledInputs);
+			var outputsCount = outputs.Length;
+			var outputDataPickers = OutputDataPickers.OrderBy(outputDataPicker => outputDataPicker.Index).ToArray();
+			var denormalizedOutput = new double[outputsCount];
+			i = 0;
+			while (i < outputsCount)
+			{
+				var dataPicker = OutputDataPickers[i];
+				denormalizedOutput[i] = dataPicker.Normalizer.Denormalize(outputs[i]);
+			}
+			return denormalizedOutput;
+		}
+
+		
+
+		public double[] Run(double[] data)
+		{
+			return NeuralNetwork.Run(data);
 		}
 
 		private int NeuralNetwork_Callback(NeuralNet net, TrainingData train, uint maxEpochs, uint epochsBetweenReports, float desiredError, uint epochs)
 		{
 			return OnCallback(net, train, maxEpochs, epochsBetweenReports, desiredError, epochs);
-		}
-
-		[DllExport("run", CallingConvention = CallingConvention.Cdecl)]
-		public double[] Run(double[] input)
-		{
-			foreach (var inputDataPicker in InputDataPickers)
-			{
-				inputDataPicker.Normalizer.Normalize(input);
-			}			
-			return NeuralNetwork.Run(input);
 		}
 	}
 }

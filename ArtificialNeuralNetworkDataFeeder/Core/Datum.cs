@@ -15,5 +15,10 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
         public double Low { get; set; }
         public double Close { get; set; }
         public long Volume { get; set; }
-    }
+
+		public override string ToString()
+		{
+			return string.Format("{0} {1} {2} {3} {4} {5}", Date, Open, High, Low, Close, Volume);
+		}
+	}
 }

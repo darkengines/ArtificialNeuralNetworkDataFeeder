@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ArtificialNeuralNetworkDataFeeder.Core;
 
 namespace ArtificialNeuralNetworkDataFeeder.DataNormalizers {
-    public class RangeDataNormalizer : DataNormalizer<double, double> {
+    public class RangeDataNormalizer : DataNormalizer {
         public double MinimumIn { get; set; }
         public double MaximumIn { get; set; }
         public double MinimumOut { get; set; }
@@ -23,5 +23,13 @@ namespace ArtificialNeuralNetworkDataFeeder.DataNormalizers {
             MinimumOut = -1.0;
             MaximumOut = 1.0;
         }
-    }
+
+		public override double Denormalize(double datum)
+		{
+			var m = MinimumIn;
+			var r = MaximumIn - m;
+			var y = (datum - MinimumOut) / (MaximumOut - MinimumOut);
+			return y * r + m;
+		}
+	}
 }
