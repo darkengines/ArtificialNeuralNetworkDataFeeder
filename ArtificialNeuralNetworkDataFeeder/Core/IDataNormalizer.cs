@@ -5,11 +5,13 @@ namespace ArtificialNeuralNetworkDataFeeder.Core {
         double Normalize (double datum);
 		double Denormalize(double datum);
         void Initialize (double[] data);
+		void Update(double value);
     }
 	public abstract class DataNormalizer : IDataNormalizer
 	{
 		public abstract double Normalize(double datum);
 		public abstract double Denormalize(double datum);
 		public abstract void Initialize(double[] data);
+		public abstract void Update(double value);
 	}
 }

@@ -31,5 +31,10 @@ namespace ArtificialNeuralNetworkDataFeeder.DataNormalizers {
 			var y = (datum - MinimumOut) / (MaximumOut - MinimumOut);
 			return y * r + m;
 		}
+		public override void Update(double value)
+		{
+			if (value > MaximumIn) MaximumIn = value;
+			if (value < MinimumIn) MinimumIn = value;
+		}
 	}
 }

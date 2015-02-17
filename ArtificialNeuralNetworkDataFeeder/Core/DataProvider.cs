@@ -68,14 +68,13 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 
 		protected double[] BuildTrainingData(Datum[] data, out uint dataCount)
 		{
-			dataCount = (uint)data.Length;
-			var inputCount = InputDataPickers.Count();
-			var processedCompiledInputs = new double[inputCount];
-			var normalizedProcessedCompiledInputs = new double[inputCount];
 			var dataPickers = InputDataPickers.OrderBy(inputDataPicker => inputDataPicker.Index).Concat(OutputDataPickers.OrderBy(outputDataPicker => outputDataPicker.Index)).ToArray();
-			var sets = new Dictionary<IDataPicker, double>();
+			dataCount = (uint)(data.Length - MinimumIndex - dataPickers.Length);
+			var totalCount = (uint)(dataCount*dataPickers.Length)
+			var processedCompiled = new double[totalCount];
+			var normalizedProcessedCompiled = new double[totalCount];
 			int i = 0;
-			while (i < inputCount)
+			while (i < )
 			{
 				var dataPicker = dataPickers[i];
 				var compiledInputsCount = dataPicker.Indicator.IndexMinimum + 1;
