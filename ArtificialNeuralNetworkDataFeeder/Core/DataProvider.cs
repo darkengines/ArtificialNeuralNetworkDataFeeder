@@ -70,11 +70,10 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 		{
 			var dataPickers = InputDataPickers.OrderBy(inputDataPicker => inputDataPicker.Index).Concat(OutputDataPickers.OrderBy(outputDataPicker => outputDataPicker.Index)).ToArray();
 			dataCount = (uint)(data.Length - MinimumIndex - dataPickers.Length);
-			var totalCount = (uint)(dataCount*dataPickers.Length)
 			var processedCompiled = new double[totalCount];
 			var normalizedProcessedCompiled = new double[totalCount];
 			int i = 0;
-			while (i < )
+			while (i < dataCount)
 			{
 				var dataPicker = dataPickers[i];
 				var compiledInputsCount = dataPicker.Indicator.IndexMinimum + 1;
