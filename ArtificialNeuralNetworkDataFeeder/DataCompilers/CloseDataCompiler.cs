@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ArtificialNeuralNetworkDataFeeder.DataCompilers {
-    public class CloseDataCompiler:DataCompiler<double> {
+    public class CloseDataCompiler:DataCompiler {
         public override double Compile (Datum datum) {
             return datum.Close;
         }
