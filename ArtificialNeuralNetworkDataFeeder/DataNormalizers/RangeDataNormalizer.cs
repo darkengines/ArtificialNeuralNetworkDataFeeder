@@ -7,13 +7,13 @@ using ArtificialNeuralNetworkDataFeeder.Core;
 
 namespace ArtificialNeuralNetworkDataFeeder.DataNormalizers {
     public class RangeDataNormalizer : DataNormalizer {
-        public double MinimumIn { get; set; }
-        public double MaximumIn { get; set; }
+        public double? MinimumIn { get; set; }
+        public double? MaximumIn { get; set; }
         public double MinimumOut { get; set; }
         public double MaximumOut { get; set; }
         public override double Normalize (double datum) {
-            var m = MinimumIn;
-            var r = MaximumIn - m;
+            var m =(double)MinimumIn;
+            var r = (double)MaximumIn - m;
             var y = (datum - m) / r;
             return y*(MaximumOut - MinimumOut) + MinimumOut;
         }
@@ -26,15 +26,15 @@ namespace ArtificialNeuralNetworkDataFeeder.DataNormalizers {
 
 		public override double Denormalize(double datum)
 		{
-			var m = MinimumIn;
-			var r = MaximumIn - m;
+			var m = (double)MinimumIn;
+			var r = (double)MaximumIn - m;
 			var y = (datum - MinimumOut) / (MaximumOut - MinimumOut);
 			return y * r + m;
 		}
 		public override void Update(double value)
 		{
-			if (value > MaximumIn) MaximumIn = value;
-			if (value < MinimumIn) MinimumIn = value;
+			if (value > MaximumIn || MaximumIn == null) MaximumIn = value;
+			if (value < MinimumIn || MinimumIn == null) MinimumIn = value;
 		}
 	}
 }

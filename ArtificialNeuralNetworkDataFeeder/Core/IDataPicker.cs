@@ -3,12 +3,12 @@
 		int Index { get; }
 		IDataIndicator Indicator { get; }
 		IDataNormalizer Normalizer { get; }
-        IDataCompiler Compiler { get; }
+		DataCompiler Compiler { get; }
 	}
 	public class DataPicker : IDataPicker {
 		public int Index { get; set; }
 		public IDataIndicator Indicator { get; set; }
 		public IDataNormalizer Normalizer { get; set; }
-        public IDataCompiler Compiler { get; set; }
+        public DataCompiler Compiler { get; set; }
 	}
 }

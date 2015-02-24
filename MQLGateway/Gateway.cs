@@ -26,20 +26,19 @@ namespace MQLGateway
 		{
 			DataProvider = DataProvider.Load(configurationFilePath);
 		}
-		[DllExport("GetMinimumIndex", CallingConvention.StdCall)]
-		public static int GetMinimumIndex()
+		[DllExport("GetDataCount", CallingConvention.StdCall)]
+		public static int GetDataCount()
 		{
-			return DataProvider.MinimumIndex;
+			return DataProvider.BackDataCount + 1 + DataProvider.InputDataPickers.Count();
 		}
 		[DllExport("Run", CallingConvention.StdCall)]
-		public static double Run([MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStruct, SizeConst =12)] MqlRates[] rates)
+		public static double Run([MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStruct, SizeConst =10000)] MqlRates[] rates)
 		{
-			int size = Marshal.SizeOf(rates[0]);
-			IntPtr mem =Marshal.AllocHGlobal(size * rates.Length);
-			var data = new Datum[rates.Length];
+			var length = DataProvider.BackDataCount + 1 + DataProvider.InputDataPickers.Count();
+			var data = new Datum[length];
 			var i = 0;
-			Log(rates.Length);
-			while (i<rates.Length)
+			//Log(rates.Length);
+			while (i< length)
 			{
 				var rate = rates[i];
 				var date = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
@@ -55,11 +54,11 @@ namespace MQLGateway
 				data[i] = datum;
 				i++;
 			}
-			Log(JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings() {
-				TypeNameHandling = TypeNameHandling.Auto
-			}));
-			var result = DataProvider.Run(data.Reverse().ToArray()).First();
-			Log(string.Format("OUT = {0}", result));
+			//Log(JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings() {
+			//	TypeNameHandling = TypeNameHandling.Auto
+			//}));
+			var result = DataProvider.Run(data.Reverse().ToArray());
+			//Log(string.Format("OUT = {0}", result));
 			return result;
 		}
 	}

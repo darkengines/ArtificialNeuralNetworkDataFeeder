@@ -6,16 +6,15 @@ namespace ArtificialNeuralNetworkDataFeeder.DataIndicators {
 		public override double Process(double[] data, int index)
 		{
 			index = index + 1;
-			if (index < Period) return data[index - 1];
 			var limit = index - Period;
 			var sum = 0d;
 			while (index-- > limit) sum += data[index];
 			return sum / Period;
 		}
 
-		public override int IndexMinimum
+		public override int InputCount
 		{
-			get { return Period - 1; }
+			get { return Period; }
 		}
 	}
 }
