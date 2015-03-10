@@ -65,7 +65,7 @@
       	}
       },
       {  
-      	"Index":0,
+      	"Index":2,
       	"Indicator":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
       		"Period":7
@@ -82,7 +82,7 @@
       	}
       },
       {  
-      	"Index":0,
+      	"Index":2,
       	"Indicator":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
       		"Period":14
@@ -99,7 +99,7 @@
       	}
       },
       {  
-      	"Index":0,
+      	"Index":2,
       	"Indicator":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
       		"Period":31
@@ -116,7 +116,7 @@
       	}
       },
       {  
-      	"Index":0,
+      	"Index":2,
       	"Indicator":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
       		"Period":62
@@ -133,7 +133,7 @@
       	}
       },
 	  {  
-	  	"Index":0,
+	  	"Index":2,
 	  	"Indicator":{  
 	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
 	  		"Period":182
@@ -152,7 +152,7 @@
    ],
    "OutputDataPickers":[  
       {  
-      	"Index":3,
+      	"Index":1,
       	"Indicator":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
       		"Period":1
