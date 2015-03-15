@@ -29,16 +29,16 @@ namespace MQLGateway
 		[DllExport("GetDataCount", CallingConvention.StdCall)]
 		public static int GetDataCount()
 		{
-			return DataProvider.BackDataCount + 1 + DataProvider.InputDataPickers.Count();
+			return DataProvider.TailDataPicker.Indicator.InputCount - DataProvider.TailDataPicker.Index;
 		}
 		[DllExport("Run", CallingConvention.StdCall)]
-		public static double Run([MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStruct, SizeConst =10000)] MqlRates[] rates)
+		public static double Run([MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStruct, SizeConst = 10000)] MqlRates[] rates)
 		{
-			var length = DataProvider.BackDataCount + 1 + DataProvider.InputDataPickers.Count();
+			var length = DataProvider.TailDataPicker.Indicator.InputCount - DataProvider.TailDataPicker.Index;
 			var data = new Datum[length];
 			var i = 0;
 			//Log(rates.Length);
-			while (i< length)
+			while (i < length)
 			{
 				var rate = rates[i];
 				var date = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);

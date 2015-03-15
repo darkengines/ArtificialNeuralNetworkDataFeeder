@@ -37,8 +37,7 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 		public static DataProvider Load(string path)
 		{
 			var neuralNetPath = Path.ChangeExtension(path, NeuralNetConfigurationFileExtension);
-			var dataProvider = JsonConvert.DeserializeObject<DataProvider>(File.ReadAllText(path), new JsonSerializerSettings()
-			{
+			var dataProvider = JsonConvert.DeserializeObject<DataProvider>(File.ReadAllText(path), new JsonSerializerSettings() {
 				TypeNameHandling = TypeNameHandling.Auto
 			});
 			dataProvider.NeuralNetwork = new NeuralNet();
@@ -49,8 +48,7 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 		public static DataProvider Save(DataProvider dataProvider, string path)
 		{
 			var neuralNetPath = Path.ChangeExtension(path, NeuralNetConfigurationFileExtension);
-			File.WriteAllText(path, JsonConvert.SerializeObject(dataProvider, Formatting.Indented, new JsonSerializerSettings()
-			{
+			File.WriteAllText(path, JsonConvert.SerializeObject(dataProvider, Formatting.Indented, new JsonSerializerSettings() {
 				TypeNameHandling = TypeNameHandling.Auto
 			}));
 			dataProvider.NeuralNetwork.Save(neuralNetPath);
@@ -124,11 +122,8 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 			return normalizedProcessedCompiled;
 		}
 
-		protected TrainingData BuildTrainingData(double[] subset, uint dataCount, int offset = 0, int? count = null)
+		protected TrainingData BuildTrainingData(double[] subset, uint dataCount)
 		{
-			if (count == null) count = subset.Length - offset;
-			
-			Array.Copy()
 			var inputCount = (uint)DataPickers.Where(dataPicker => dataPicker.Index <= 0).Count();
 			var outputCount = (uint)DataPickers.Where(dataPicker => dataPicker.Index > 0).Count();
 			var trainingData = new TrainingData();
@@ -191,7 +186,6 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 			NeuralNetwork.Callback += NeuralNetwork_Callback;
 
 			NeuralNetwork.TrainOnData(trainingData, NeuralNetworkConfiguration.MaxEpochs, NeuralNetworkConfiguration.EpochsBetweenReports, NeuralNetworkConfiguration.DesiredMSE);
-			NeuralNetwork.TestData()
 		}
 
 		public void BuildNeuralNetwork(Datum[] rawTrainingData)
@@ -202,11 +196,22 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 			TrainNeuralNetwork(data, dataCount);
 		}
 
+		public static void Log(object message)
+		{
+			using (var stream = new FileStream(@"C:\out.log", FileMode.Append, FileAccess.Write))
+			{
+				using (var writer = new StreamWriter(stream))
+				{
+					writer.WriteLine(message);
+				}
+			}
+		}
+
 		public double Run(Datum[] data)
 		{
 			var dataPickers = DataPickers.Where(dataPicker => dataPicker.Index <= 0).ToArray();
 			var dataPickersCount = dataPickers.Count();
-			var dataCount = (uint)(data.Length - BackDataCount - FrontDataCount + 1);
+			var dataCount = (uint)(data.Length - BackDataCount + 1);
 			var totalCount = (uint)(dataCount * dataPickersCount);
 			var processedCompiled = new double[totalCount];
 			var normalizedProcessedCompiled = new double[totalCount];
@@ -214,7 +219,7 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 
 			int i = BackDataCount - 1 - tailDataPicker.Index;
 			int k = 0;
-			while (i < data.Length - FrontDataCount)
+			while (i < data.Length)
 			{
 				int j = 0;
 				foreach (var dataPicker in dataPickers)
@@ -222,12 +227,14 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 					var backDataCount = dataPicker.Indicator.InputCount;
 					var compiledData = dataPicker.Compiler.Compile(data, i - backDataCount + 1 + dataPicker.Index, backDataCount);
 					var processedData = dataPicker.Indicator.Process(compiledData, compiledData.Length - 1);
+					//Log(string.Join(", ", processedData));
 					processedCompiled[k * dataPickersCount + j] = processedData;
 					j++;
 				}
 				k++;
 				i++;
 			}
+			Log(string.Join(", ", processedCompiled));
 			i = 0;
 			while (i < totalCount)
 			{
@@ -235,7 +242,8 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 				normalizedProcessedCompiled[i] = dataPicker.Normalizer.Normalize(processedCompiled[i]);
 				i++;
 			}
-			return Run(normalizedProcessedCompiled)[0];
+			//Log(string.Join(", ", normalizedProcessedCompiled));
+			return Run(normalizedProcessedCompiled)[0] - normalizedProcessedCompiled[Array.FindIndex(dataPickers, dataPicker => dataPicker.Compare)];
 		}
 
 

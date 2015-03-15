@@ -90,6 +90,8 @@
     <Compile Include="Core\NeuralNetworkConfiguration.cs" />
     <Compile Include="Core\TrainData.cs" />
     <Compile Include="DataCompilers\CloseDataCompiler.cs" />
+    <Compile Include="DataCompilers\VolumeDataCompiler.cs" />
+    <Compile Include="DataIndicators\InvariantIndicator.cs" />
     <Compile Include="DataIndicators\MovingAverageIndicator.cs" />
     <Compile Include="DataNormalizers\RangeDataNormalizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
