@@ -16,7 +16,7 @@ namespace MQLGatewayTester
 			var ratesCount = Gateway.GetDataCount();
 			var rates = new MqlRates[ratesCount];
 			int i = 0;
-			while (i < ratesCount) rates[i++] = new MqlRates() { time = DateTime.Now.Second, open = 1.52351, high = 1.52456, low = 1.5233, close = 1.52418, real_volume = 100, spread = 12, tick_volume = 1149 };
+			while (i < ratesCount) rates[i++] = new MqlRates() { time = DateTime.Now.Second, open = 1.52351, high = 1.52456, low = 1.5233, close = (double)i/ (double)ratesCount, real_volume = 100, spread = 12, tick_volume = 1149 };
 			var test = Gateway.Run(rates);
 		}
 	}
