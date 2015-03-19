@@ -92,6 +92,7 @@
     <Compile Include="DataCompilers\CloseDataCompiler.cs" />
     <Compile Include="DataCompilers\VolumeDataCompiler.cs" />
     <Compile Include="DataIndicators\InvariantIndicator.cs" />
+    <Compile Include="DataIndicators\ReturnIndicator.cs" />
     <Compile Include="DataIndicators\MovingAverageIndicator.cs" />
     <Compile Include="DataNormalizers\RangeDataNormalizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

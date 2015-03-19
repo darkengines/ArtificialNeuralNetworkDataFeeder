@@ -1,71 +1,33 @@
 {  
 	"NeuralNetworkConfiguration":{  
 		"HiddenLayers":[  
-		   64,
-		   32,
-		   16,
-		   4,
-		   2,
+		   70,50,20,5
 		],
 		"LearingRate": 0.01,
-		"MaxEpochs": 1000,
-		"EpochsBetweenReports": 100,
-		"DesiredMSE": 0.00001
+		"MaxEpochs": 500,
+		"EpochsBetweenReports": 10,
+		"DesiredMSE": 0.000001
 	},
-   "InputDataPickers":[  
+   "DataPickers":[
       {  
       	"Index":0,
+      	"Compare":1,
       	"Indicator":{  
-      		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
-      		"Period":1
+      		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.InvariantIndicator, ArtificialNeuralNetworkDataFeeder",
       	},
       	"Normalizer":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
       		"MinimumOut":-0.9,
       		"MaximumOut":0.9,
-      		"MinimumIn":0.4,
-      		"MaximumIn":1.6
+      		"MinimumIn":1.1,
+      		"MaximumIn":1.8
       	},
       	"Compiler":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"
       	}
       },
       {  
-      	"Index":1,
-      	"Indicator":{  
-      		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
-      		"Period":1
-      	},
-      	"Normalizer":{  
-      		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
-      		"MinimumOut":-0.9,
-      		"MaximumOut":0.9,
-      		"MinimumIn":0.4,
-      		"MaximumIn":1.6
-      	},
-      	"Compiler":{  
-      		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"
-      	}
-      },
-      {  
-      	"Index":2,
-      	"Indicator":{  
-      		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
-      		"Period":2
-      	},
-      	"Normalizer":{  
-      		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
-      		"MinimumOut":-0.9,
-      		"MaximumOut":0.9,
-      		"MinimumIn":0.4,
-      		"MaximumIn":1.6
-      	},
-      	"Compiler":{  
-      		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"
-      	}
-      },
-      {  
-      	"Index":2,
+      	"Index":0,
       	"Indicator":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
       		"Period":7
@@ -74,15 +36,15 @@
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
       		"MinimumOut":-0.9,
       		"MaximumOut":0.9,
-      		"MinimumIn":0.4,
-      		"MaximumIn":1.6
+      		"MinimumIn":1.1,
+      		"MaximumIn":1.8
       	},
       	"Compiler":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"
       	}
       },
       {  
-      	"Index":2,
+      	"Index":0,
       	"Indicator":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
       		"Period":14
@@ -91,78 +53,92 @@
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
       		"MinimumOut":-0.9,
       		"MaximumOut":0.9,
-      		"MinimumIn":0.4,
-      		"MaximumIn":1.6
-      	},
-      	"Compiler":{  
-      		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"
-      	}
-      },
-      {  
-      	"Index":2,
-      	"Indicator":{  
-      		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
-      		"Period":31
-      	},
-      	"Normalizer":{  
-      		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
-      		"MinimumOut":-0.9,
-      		"MaximumOut":0.9,
-      		"MinimumIn":0.4,
-      		"MaximumIn":1.6
-      	},
-      	"Compiler":{  
-      		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"
-      	}
-      },
-      {  
-      	"Index":2,
-      	"Indicator":{  
-      		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
-      		"Period":62
-      	},
-      	"Normalizer":{  
-      		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
-      		"MinimumOut":-0.9,
-      		"MaximumOut":0.9,
-      		"MinimumIn":0.4,
-      		"MaximumIn":1.6
+      		"MinimumIn":1.1,
+      		"MaximumIn":1.8
       	},
       	"Compiler":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"
       	}
       },
 	  {  
-	  	"Index":2,
+	  	"Index":0,
 	  	"Indicator":{  
 	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
-	  		"Period":182
+	  		"Period":28
 	  	},
 	  	"Normalizer":{  
 	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
 	  		"MinimumOut":-0.9,
 	  		"MaximumOut":0.9,
-	  		"MinimumIn":0.4,
-	  		"MaximumIn":1.6
+	  		"MinimumIn":1.1,
+	  		"MaximumIn":1.8
 	  	},
 	  	"Compiler":{  
 	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"
 	  	}
 	  },
-   ],
-   "OutputDataPickers":[  
+	  {  
+	  	"Index":0,
+	  	"Indicator":{  
+	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
+	  		"Period":52
+	  	},
+	  	"Normalizer":{  
+	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
+	  		"MinimumOut":-0.9,
+	  		"MaximumOut":0.9,
+	  		"MinimumIn":1.1,
+	  		"MaximumIn":1.8
+	  	},
+	  	"Compiler":{  
+	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"
+	  	}
+	  },
+	  {  
+	  	"Index":0,
+	  	"Indicator":{  
+	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
+	  		"Period":104
+	  	},
+	  	"Normalizer":{  
+	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
+	  		"MinimumOut":-0.9,
+	  		"MaximumOut":0.9,
+	  		"MinimumIn":1.1,
+	  		"MaximumIn":1.8
+	  	},
+	  	"Compiler":{  
+	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"
+	  	}
+	  },
+	  {  
+	  	"Index":0,
+	  	"Indicator":{  
+	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
+	  		"Period":208
+	  	},
+	  	"Normalizer":{  
+	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
+	  		"MinimumOut":-0.9,
+	  		"MaximumOut":0.9,
+	  		"MinimumIn":1.1,
+	  		"MaximumIn":1.8
+	  	},
+	  	"Compiler":{  
+	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"
+	  	}
+	  },
       {  
-      	"Index":1,
+      	"Index":7,
       	"Indicator":{  
-      		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
-      		"Period":1
+      		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.InvariantIndicator, ArtificialNeuralNetworkDataFeeder",
       	},
       	"Normalizer":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
       		"MinimumOut":-0.9,
       		"MaximumOut":0.9,
-			"MinimumIn":0.4,
-      		"MaximumIn":1.6
+      		"MinimumIn":1.1,
+      		"MaximumIn":1.8
       	},
       	"Compiler":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"
