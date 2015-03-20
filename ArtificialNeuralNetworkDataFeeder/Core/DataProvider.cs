@@ -74,7 +74,7 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 		protected double[] BuildTrainingData(Datum[] data, out uint dataCount)
 		{
 			var tailDataPicker = TailDataPicker;
-			var dataPickersCount = DataPickers.Count();
+			var dataPickersCount = DataPickers.Sum(dataPicker => dataPicker.Count * dataPicker.Indicator.OutputCount);
 			dataCount = (uint)(data.Length + tailDataPicker.Index - tailDataPicker.Indicator.InputCount - HeadDataPicker.Index + 1);
 			var totalCount = (uint)(dataCount * dataPickersCount);
 			var processedCompiled = new double[totalCount];
@@ -88,10 +88,10 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 				foreach (var dataPicker in DataPickers)
 				{
 					var backDataCount = dataPicker.Indicator.InputCount;
-					var compiledData = dataPicker.Compiler.Compile(data, i - backDataCount + 1 + dataPicker.Index, backDataCount);
-					var processedData = dataPicker.Indicator.Process(compiledData, compiledData.Length - 1);
+					var compiledData = dataPicker.Compiler.Compile(data, i - backDataCount + 1 + dataPicker.Index, backDataCount + dataPicker.Index);
+					var processedData = dataPicker.Indicator.Process(compiledData, compiledData.Length - 1, dataPicker.Count);
 					dataPicker.Normalizer.Update(processedData);
-					processedCompiled[k * dataPickersCount + j] = processedData;
+					Array.Copy(processedData, 0, processedCompiled, k * dataPickersCount + j, dataPicker.Indicator.OutputCount);
 					j++;
 				}
 				k++;
@@ -147,7 +147,7 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 
 		public void InitializeNeuralNetwork()
 		{
-			var inputCount = (uint)DataPickers.Where(dataPicker => dataPicker.Index <= 0).Count();
+			var inputCount = (uint)DataPickers.Where(dataPicker => dataPicker.Index <= 0).Sum(dataPicker => dataPicker.Indicator.InputCount)
 			var outputCount = (uint)DataPickers.Where(dataPicker => dataPicker.Index > 0).Count();
 			NeuralNetwork = new NeuralNet();
 			var layers = new List<uint>(NeuralNetworkConfiguration.HiddenLayers);
@@ -194,39 +194,33 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 		public double Run(Datum[] data)
 		{
 			var dataPickers = DataPickers.Where(dataPicker => dataPicker.Index <= 0).ToArray();
-			var dataPickersCount = dataPickers.Count();
-			var dataCount = (uint)(data.Length + TailDataPicker.Index - TailDataPicker.Indicator.InputCount + 1);
+			var tailDataPicker = TailDataPicker;
+			var dataPickersCount = dataPickers.Sum(dataPicker => dataPicker.Count * dataPicker.Indicator.OutputCount);
+			var dataCount = (uint)(data.Length + tailDataPicker.Index - tailDataPicker.Indicator.InputCount - HeadDataPicker.Index + 1);
 			var totalCount = (uint)(dataCount * dataPickersCount);
 			var processedCompiled = new double[totalCount];
 			var normalizedProcessedCompiled = new double[totalCount];
-			var tailDataPicker = TailDataPicker;
 
-			int i = tailDataPicker.Indicator.InputCount - 1 - tailDataPicker.Index;
+			int i = TailDataPicker.Indicator.InputCount - 1 - tailDataPicker.Index;
 			int k = 0;
-			while (i < data.Length)
-			{
+			while (i < data.Length - HeadDataPicker.Index) {
 				int j = 0;
-				foreach (var dataPicker in dataPickers)
-				{
+				foreach (var dataPicker in dataPickers) {
 					var backDataCount = dataPicker.Indicator.InputCount;
-					var compiledData = dataPicker.Compiler.Compile(data, i - backDataCount + 1 + dataPicker.Index, backDataCount);
-					var processedData = dataPicker.Indicator.Process(compiledData, compiledData.Length - 1);
-					Log(string.Join(", ", processedData));
-					processedCompiled[k * dataPickersCount + j] = processedData;
+					var compiledData = dataPicker.Compiler.Compile(data, i - backDataCount + 1 + dataPicker.Index, backDataCount + dataPicker.Index);
+					var processedData = dataPicker.Indicator.Process(compiledData, compiledData.Length - 1, dataPicker.Count);
+					Array.Copy(processedData, 0, processedCompiled, k * dataPickersCount + j, dataPicker.Indicator.OutputCount);
 					j++;
 				}
 				k++;
 				i++;
 			}
-			Log(string.Join(", ", processedCompiled));
 			i = 0;
-			while (i < totalCount)
-			{
+			while (i < totalCount) {
 				var dataPicker = dataPickers[i % dataPickersCount];
 				normalizedProcessedCompiled[i] = dataPicker.Normalizer.Normalize(processedCompiled[i]);
 				i++;
 			}
-			Log(string.Join(", ", normalizedProcessedCompiled));
 			return Run(normalizedProcessedCompiled)[0] - normalizedProcessedCompiled[Array.FindIndex(dataPickers, dataPicker => dataPicker.Compare)];
 		}
 
