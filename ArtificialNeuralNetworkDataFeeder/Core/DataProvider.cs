@@ -147,7 +147,7 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 
 		public void InitializeNeuralNetwork()
 		{
-			var inputCount = (uint)DataPickers.Where(dataPicker => dataPicker.Index <= 0).Sum(dataPicker => dataPicker.Indicator.InputCount)
+			var inputCount = (uint)DataPickers.Where(dataPicker => dataPicker.Index <= 0).Sum(dataPicker => dataPicker.Indicator.InputCount);
 			var outputCount = (uint)DataPickers.Where(dataPicker => dataPicker.Index > 0).Count();
 			NeuralNetwork = new NeuralNet();
 			var layers = new List<uint>(NeuralNetworkConfiguration.HiddenLayers);
