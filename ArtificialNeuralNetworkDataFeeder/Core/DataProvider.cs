@@ -88,7 +88,7 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 				foreach (var dataPicker in DataPickers)
 				{
 					var backDataCount = dataPicker.Indicator.InputCount;
-					var compiledData = dataPicker.Compiler.Compile(data, i - backDataCount + 1 + dataPicker.Index, backDataCount + dataPicker.Index);
+					var compiledData = dataPicker.Compiler.Compile(data, i - backDataCount + 1 + dataPicker.Index, backDataCount);
 					var processedData = dataPicker.Indicator.Process(compiledData, compiledData.Length - 1, dataPicker.Count);
 					dataPicker.Normalizer.Update(processedData);
 					Array.Copy(processedData, 0, processedCompiled, k * dataPickersCount + j, dataPicker.Indicator.OutputCount);
@@ -147,7 +147,7 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 
 		public void InitializeNeuralNetwork()
 		{
-			var inputCount = (uint)DataPickers.Where(dataPicker => dataPicker.Index <= 0).Sum(dataPicker => dataPicker.Indicator.InputCount);
+			var inputCount = (uint)DataPickers.Where(dataPicker => dataPicker.Index <= 0).Sum(dataPicker => dataPicker.Count);
 			var outputCount = (uint)DataPickers.Where(dataPicker => dataPicker.Index > 0).Count();
 			NeuralNetwork = new NeuralNet();
 			var layers = new List<uint>(NeuralNetworkConfiguration.HiddenLayers);
@@ -196,18 +196,18 @@ namespace ArtificialNeuralNetworkDataFeeder.Core
 			var dataPickers = DataPickers.Where(dataPicker => dataPicker.Index <= 0).ToArray();
 			var tailDataPicker = TailDataPicker;
 			var dataPickersCount = dataPickers.Sum(dataPicker => dataPicker.Count * dataPicker.Indicator.OutputCount);
-			var dataCount = (uint)(data.Length + tailDataPicker.Index - tailDataPicker.Indicator.InputCount - HeadDataPicker.Index + 1);
+			var dataCount = (uint)(data.Length + tailDataPicker.Index - tailDataPicker.Indicator.InputCount + 1);
 			var totalCount = (uint)(dataCount * dataPickersCount);
 			var processedCompiled = new double[totalCount];
 			var normalizedProcessedCompiled = new double[totalCount];
 
 			int i = TailDataPicker.Indicator.InputCount - 1 - tailDataPicker.Index;
 			int k = 0;
-			while (i < data.Length - HeadDataPicker.Index) {
+			while (i < data.Length) {
 				int j = 0;
 				foreach (var dataPicker in dataPickers) {
 					var backDataCount = dataPicker.Indicator.InputCount;
-					var compiledData = dataPicker.Compiler.Compile(data, i - backDataCount + 1 + dataPicker.Index, backDataCount + dataPicker.Index);
+					var compiledData = dataPicker.Compiler.Compile(data, i - backDataCount + 1 + dataPicker.Index, backDataCount);
 					var processedData = dataPicker.Indicator.Process(compiledData, compiledData.Length - 1, dataPicker.Count);
 					Array.Copy(processedData, 0, processedCompiled, k * dataPickersCount + j, dataPicker.Indicator.OutputCount);
 					j++;
