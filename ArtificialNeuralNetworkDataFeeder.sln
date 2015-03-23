@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 14
+VisualStudioVersion = 14.0.22310.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtificialNeuralNetworkDataFeeder", "ArtificialNeuralNetworkDataFeeder\ArtificialNeuralNetworkDataFeeder.csproj", "{368F5BF3-C3B2-49BA-ACE1-8DC2C4072585}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MQLGateway", "MQLGateway\MQLGateway.csproj", "{1A5D0062-BC94-455B-99B9-34A84FCD635A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MQLGatewayTester", "MQLGatewayTester\MQLGatewayTester.csproj", "{C651050A-0D1C-42DC-B9F5-340A162E81B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtificialNeuralNetworkDataFeeder.UI", "ArtificialNeuralNetworkDataFeeder.UI\ArtificialNeuralNetworkDataFeeder.UI.csproj", "{4165ABFD-E2AD-4C48-8732-D40DD1745387}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +89,22 @@ Global
 		{C651050A-0D1C-42DC-B9F5-340A162E81B5}.Release|Win32.Build.0 = Release|Any CPU
 		{C651050A-0D1C-42DC-B9F5-340A162E81B5}.Release|x64.ActiveCfg = Release|Any CPU
 		{C651050A-0D1C-42DC-B9F5-340A162E81B5}.Release|x64.Build.0 = Release|Any CPU
+		{4165ABFD-E2AD-4C48-8732-D40DD1745387}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4165ABFD-E2AD-4C48-8732-D40DD1745387}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4165ABFD-E2AD-4C48-8732-D40DD1745387}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4165ABFD-E2AD-4C48-8732-D40DD1745387}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4165ABFD-E2AD-4C48-8732-D40DD1745387}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{4165ABFD-E2AD-4C48-8732-D40DD1745387}.Debug|Win32.Build.0 = Debug|Any CPU
+		{4165ABFD-E2AD-4C48-8732-D40DD1745387}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4165ABFD-E2AD-4C48-8732-D40DD1745387}.Debug|x64.Build.0 = Debug|Any CPU
+		{4165ABFD-E2AD-4C48-8732-D40DD1745387}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4165ABFD-E2AD-4C48-8732-D40DD1745387}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4165ABFD-E2AD-4C48-8732-D40DD1745387}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4165ABFD-E2AD-4C48-8732-D40DD1745387}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4165ABFD-E2AD-4C48-8732-D40DD1745387}.Release|Win32.ActiveCfg = Release|Any CPU
+		{4165ABFD-E2AD-4C48-8732-D40DD1745387}.Release|Win32.Build.0 = Release|Any CPU
+		{4165ABFD-E2AD-4C48-8732-D40DD1745387}.Release|x64.ActiveCfg = Release|Any CPU
+		{4165ABFD-E2AD-4C48-8732-D40DD1745387}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

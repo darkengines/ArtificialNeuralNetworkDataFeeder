@@ -1,12 +1,12 @@
 {  
 	"NeuralNetworkConfiguration":{  
 		"HiddenLayers":[  
-		   150,100,70,30,16,8
+		   70,50,20,5
 		],
 		"LearingRate": 0.01,
 		"MaxEpochs": 500,
 		"EpochsBetweenReports": 10,
-		"DesiredMSE": 0.00001
+		"DesiredMSE": 0.000001
 	},
    "DataPickers":[
       {  
@@ -19,8 +19,8 @@
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
       		"MinimumOut":-0.9,
       		"MaximumOut":0.9,
-      		"MinimumIn":0.8,
-      		"MaximumIn":1.8
+      		"MinimumIn":1.0,
+      		"MaximumIn":1.0
       	},
       	"Compiler":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"
@@ -29,15 +29,15 @@
       {  
       	"Index":0,
       	"Indicator":{  
-      		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
-			"Period":2
+      		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.ReturnMovingAverage, ArtificialNeuralNetworkDataFeeder",
+      		"Period":7
       	},
       	"Normalizer":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
       		"MinimumOut":-0.9,
       		"MaximumOut":0.9,
-      		"MinimumIn":0.8,
-      		"MaximumIn":1.8
+      		"MinimumIn":1.0,
+      		"MaximumIn":1.0
       	},
       	"Compiler":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"
@@ -46,15 +46,15 @@
       {  
       	"Index":0,
       	"Indicator":{  
-      		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
-      		"Period":4
+      		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.ReturnMovingAverage, ArtificialNeuralNetworkDataFeeder",
+      		"Period":14
       	},
       	"Normalizer":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
       		"MinimumOut":-0.9,
       		"MaximumOut":0.9,
-      		"MinimumIn":0.8,
-      		"MaximumIn":1.8
+      		"MinimumIn":1.0,
+      		"MaximumIn":1.0
       	},
       	"Compiler":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"
@@ -63,15 +63,15 @@
 	  {  
 	  	"Index":0,
 	  	"Indicator":{  
-	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
-	  		"Period":8
+	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.ReturnMovingAverage, ArtificialNeuralNetworkDataFeeder",
+	  		"Period":28
 	  	},
 	  	"Normalizer":{  
 	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
 	  		"MinimumOut":-0.9,
 	  		"MaximumOut":0.9,
-	  		"MinimumIn":0.8,
-	  		"MaximumIn":1.8
+	  		"MinimumIn":1.0,
+	  		"MaximumIn":1.0
 	  	},
 	  	"Compiler":{  
 	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"
@@ -80,15 +80,15 @@
 	  {  
 	  	"Index":0,
 	  	"Indicator":{  
-	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
-	  		"Period":16
+	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.ReturnMovingAverage, ArtificialNeuralNetworkDataFeeder",
+	  		"Period":52
 	  	},
 	  	"Normalizer":{  
 	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
 	  		"MinimumOut":-0.9,
 	  		"MaximumOut":0.9,
-	  		"MinimumIn":0.8,
-	  		"MaximumIn":1.8
+	  		"MinimumIn":1.0,
+	  		"MaximumIn":1.0
 	  	},
 	  	"Compiler":{  
 	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"
@@ -97,15 +97,15 @@
 	  {  
 	  	"Index":0,
 	  	"Indicator":{  
-	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
-	  		"Period":24
+	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.ReturnMovingAverage, ArtificialNeuralNetworkDataFeeder",
+	  		"Period":104
 	  	},
 	  	"Normalizer":{  
 	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
 	  		"MinimumOut":-0.9,
 	  		"MaximumOut":0.9,
-	  		"MinimumIn":0.8,
-	  		"MaximumIn":1.8
+	  		"MinimumIn":1.0,
+	  		"MaximumIn":1.0
 	  	},
 	  	"Compiler":{  
 	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"
@@ -114,22 +114,22 @@
 	  {  
 	  	"Index":0,
 	  	"Indicator":{  
-	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.MovingAverageIndicator, ArtificialNeuralNetworkDataFeeder",
-	  		"Period":48
+	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.ReturnMovingAverage, ArtificialNeuralNetworkDataFeeder",
+	  		"Period":208
 	  	},
 	  	"Normalizer":{  
 	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
 	  		"MinimumOut":-0.9,
 	  		"MaximumOut":0.9,
-	  		"MinimumIn":0.8,
-	  		"MaximumIn":1.8
+	  		"MinimumIn":1.0,
+	  		"MaximumIn":1.0
 	  	},
 	  	"Compiler":{  
 	  		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"
 	  	}
 	  },
       {  
-      	"Index":3,
+      	"Index":7,
       	"Indicator":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataIndicators.InvariantIndicator, ArtificialNeuralNetworkDataFeeder",
       	},
@@ -137,8 +137,8 @@
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataNormalizers.RangeDataNormalizer, ArtificialNeuralNetworkDataFeeder",
       		"MinimumOut":-0.9,
       		"MaximumOut":0.9,
-      		"MinimumIn":0.8,
-      		"MaximumIn":1.8
+      		"MinimumIn":1.0,
+      		"MaximumIn":1.0
       	},
       	"Compiler":{  
       		"$type":"ArtificialNeuralNetworkDataFeeder.DataCompilers.CloseDataCompiler, ArtificialNeuralNetworkDataFeeder"

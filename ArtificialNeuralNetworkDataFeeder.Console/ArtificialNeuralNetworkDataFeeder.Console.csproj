@@ -105,6 +105,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="h1.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="configD.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
