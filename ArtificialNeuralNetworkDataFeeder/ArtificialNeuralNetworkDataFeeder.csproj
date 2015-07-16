@@ -91,6 +91,7 @@
     <Compile Include="Core\NeuralNetworkConfiguration.cs" />
     <Compile Include="Core\TrainData.cs" />
     <Compile Include="DataCompilers\CloseDataCompiler.cs" />
+    <Compile Include="DataCompilers\DayOfWeekDataCompiler.cs" />
     <Compile Include="DataCompilers\VolumeDataCompiler.cs" />
     <Compile Include="DataIndicators\InvariantIndicator.cs" />
     <Compile Include="DataIndicators\ReturnIndicator.cs" />

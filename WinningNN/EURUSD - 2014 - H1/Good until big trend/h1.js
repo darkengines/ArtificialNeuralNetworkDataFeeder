@@ -4,7 +4,7 @@
 		"LearingRate": 0.01,
 		"MaxEpochs": 50000,
 		"EpochsBetweenReports": 10,
-		"DesiredMSE": 0.000009
+		"DesiredMSE": 0.0000008
 	},
   "DataPickers": [
     {
